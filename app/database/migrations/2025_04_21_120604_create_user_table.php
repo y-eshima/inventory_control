@@ -27,7 +27,7 @@ class CreateUserTable extends Migration
             // 削除フラグを格納するカラム 削除するときにtrueに書き換え
             $table->boolean('del_flg')->default(false);
             // 店舗IDと紐づけるカラム
-            $table->integer('store_id');
+            $table->unsignedBigInteger('store_id');
             // 紐づけ
             $table->foreign('store_id')->references('id')->on('store');
             // 作成日、更新日を格納するカラム

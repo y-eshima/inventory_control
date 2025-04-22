@@ -17,11 +17,11 @@ class CreateArrivalTable extends Migration
             // 入荷IDを格納するカラム
             $table->bigIncrements('id');
             // 店舗IDと紐づけるカラム
-            $table->integer('store_id');
+            $table->unsignedBigInteger('store_id');
             // 店舗IDと紐づけ
             $table->foreign('store_id')->references('id')->on('store');
             // 商品IDと紐づけるカラム
-            $table->integer('product_id');
+            $table->unsignedBigInteger('product_id');
             // 商品IDと紐づけ
             $table->foreign('product_id')->references('id')->on('product');
             // 入荷個数を格納するカラム

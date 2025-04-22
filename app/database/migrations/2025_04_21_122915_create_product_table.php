@@ -21,7 +21,7 @@ class CreateProductTable extends Migration
             // 商品画像のパスを格納するカラム
             $table->string('image','255');
             // カテゴリIDと紐づけるカラム
-            $table->integer('category_id');
+            $table->unsignedBigInteger('category_id');
             // カテゴリIDとの紐づけ
             $table->foreign('category_id')->references('id')->on('category');
         });
