@@ -1,3 +1,6 @@
+/******/ import './main';
+/******/ import './plugins';
+/******/ import 'bootstrap';
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};

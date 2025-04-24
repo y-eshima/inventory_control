@@ -16,19 +16,6 @@
                 <div class="navbar-header">
                     <a href="#"><img src="{{ asset('images/logo.png') }}" class="w-25"></a>
                 </div>
-                <!-- 社員名と店舗名を表示 -->
-                <div class="d-flex align-item-center gap-3">
-                    <ul>
-                        <li>社員名</li>
-                        <li>店舗名</li>
-                    </ul>
-                </div>
-                <!-- ログアウトボタン -->
-                <div class="d-flex align-item-center gap-3">
-                    <form action="" method="post">
-                        <button class="btn btn-primary">ログアウト</button>
-                    </form>
-                </div>
             </div>
         </nav>
     </header>
