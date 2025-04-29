@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\Stock;
+use App\Models\Store;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StockController extends Controller
 {
@@ -11,9 +17,48 @@ class StockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // 在庫情報を格納する変数
+        $stocks = null;
+        // 検索されたかで分岐処理
+        if ($request->input('search')) {
+            $search = $request->input('search');
+            if (Auth::user()->role == 1) {  // 管理者の場合は店舗名か商品名で検索
+                // 全店舗の在庫から商品名か店舗名が一部分一致する在庫を一覧表示する
+                $stocks = Stock::where(function ($query) use ($search) {
+                    $query->whereHas('product', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })->orWhereHas('store', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    });
+                })->get();
+            } else {    // 一般社員の場合は所属店舗の商品名で検索
+                $stocks = Stock::where('store_id', Auth::user()->store_id)
+                    ->whereHas('product', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })->get();
+            }
+            // ビューに情報を渡して画面遷移
+            return response()->view('inventory', [
+                'user' => Auth::user(),
+                'stocks' => $stocks,
+                'search' => $search
+            ]);
+        } else {
+            if (Auth::user()->role == 1) {  // 管理者の場合は全ての在庫情報を取り出す
+                // 在庫情報をインスタンス生成
+                $stocks = Stock::all();
+            } else { // 一般社員の場合は所属店舗の在庫のみ取り出す
+                // 在庫情報をインスタンス生成
+                $stocks = Stock::where('store_id','=',Auth::user()->store_id)->with(['store', 'product'])->get();
+            }
+        }
+        // ビューに情報を渡して画面遷移
+        return response()->view('inventory', [
+            'user' => Auth::user(),
+            'stocks' => $stocks
+        ]);
     }
 
     /**
@@ -21,9 +66,15 @@ class StockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // 選択した在庫の情報を取り出す
+        $stock = Stock::where('id','=',$request->input('id'))->with('store','product')->first();
+        // ビューに情報を渡して画面遷移
+        return response()->view('inventoryElimination',[
+            'user' => Auth::user(),
+            'stock' => $stock
+        ]);
     }
 
     /**
@@ -45,7 +96,19 @@ class StockController extends Controller
      */
     public function show($id)
     {
-        //
+        // 受け取ったIDの在庫情報を変数に受け取る
+        $stock = Stock::find($id);
+        // 在庫の商品IDと一致する商品情報を受け取る
+        $product = Product::find($stock->product_id);
+        // 在庫の店舗IDと一致する店舗情報を受け取る
+        $store = Store::find($stock->store_id);
+        // ビューに情報を渡して画面遷移
+        return response()->view('inventoryDetail', [
+            'stock' => $stock,
+            'product' => $product,
+            'store' => $store,
+            'user' => Auth::user()
+        ]);
     }
 
     /**
@@ -56,7 +119,13 @@ class StockController extends Controller
      */
     public function edit($id)
     {
-        //
+        // 選択した商品の情報を取り出す
+        $stock = Stock::find($id)->with(['store', 'product']);
+        // ビューに情報を渡して画面遷移
+        return response()->view('inventoryElimination', [
+            'stock' => $stock,
+            'user' => Auth::user()
+        ]);
     }
 
     /**

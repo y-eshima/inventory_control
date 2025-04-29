@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ config('app.name','在庫管理') }}</title>
-        <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <script src="{{ mix('js/app.js') }}"></script>
     </head>
     <body>
@@ -14,7 +14,7 @@
             <div class="container">
                 <!-- ヘッダーロゴ -->
                 <div class="navbar-header">
-                    <a href="#"><img src="{{ asset('images/logo.png') }}" class="w-25"></a>
+                    <img src="{{ asset('images/logo.png') }}" class="w-25">
                 </div>
             </div>
         </nav>

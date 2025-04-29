@@ -1,6 +1,8 @@
-/******/ import './main';
-/******/ import './plugins';
+/******/ import $ from 'jquery';
+/******/ window.$ = window.jQuery = $;
 /******/ import 'bootstrap';
+/******/ import './plugins';
+/******/ import './main';
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};

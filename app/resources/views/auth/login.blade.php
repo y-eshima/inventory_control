@@ -4,15 +4,15 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8 mt-5">
-            <div class="card">
-                <div class="card-header">ログイン</div>
+            <div class="card text-center">
+                <div class="card-header h3">ログイン</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">メールアドレス</label>
+                            <label for="email" class="col-md-4 mt-3 col-form-label text-md-right">メールアドレス</label>
 
                             <div class="col-md-6 mt-3">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>

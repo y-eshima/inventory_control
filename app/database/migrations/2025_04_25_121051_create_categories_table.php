@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoreTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateStoreTable extends Migration
      */
     public function up()
     {
-        Schema::create('store', function (Blueprint $table) {
-            // 店舗IDを格納するカラム
+        Schema::create('categories', function (Blueprint $table) {
+            // カテゴリーIDを格納するカラム
             $table->bigIncrements('id');
-            // 店舗名を格納するカラム
+            // カテゴリー名を格納するカラム
             $table->string('name','30');
         });
     }
@@ -28,6 +28,6 @@ class CreateStoreTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store');
+        Schema::dropIfExists('categories');
     }
 }

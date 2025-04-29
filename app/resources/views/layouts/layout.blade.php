@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ config('app.name','在庫管理') }}</title>
-        <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <script src="{{ mix('js/app.js') }}"></script>
     </head>
     <body>
@@ -14,19 +14,20 @@
             <div class="container">
                 <!-- ヘッダーロゴ -->
                 <div class="navbar-header">
-                    <a href="#"><img src="{{ asset('images/logo.png') }}" class="w-25"></a>
+                    <a href="{{ route('home') }}"><img src="{{ asset('images/logo.png') }}" class="w-25"></a>
                 </div>
                 <!-- 社員名と店舗名を表示 -->
-                <div class="d-flex align-item-center gap-3">
-                    <ul>
-                        <li>社員名</li>
-                        <li>店舗名</li>
+                <div class="d-flex align-item-center gap-4">
+                    <ul class="list-unstyled">
+                        <li class="h5">{{ $user->name }}</li>
+                        <li class="h5">{{ $user->store->name }}</li>
                     </ul>
                 </div>
                 <!-- ログアウトボタン -->
-                <div class="d-flex align-item-center gap-3">
-                    <form action="" method="post">
-                        <button class="btn btn-primary">ログアウト</button>
+                <div class="d-flex align-item-center">
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button class="btn btn-primary btn-lg">ログアウト</button>
                     </form>
                 </div>
             </div>

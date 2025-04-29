@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductTable extends Migration
+class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('product', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             // 商品IDを格納するカラム
             $table->bigIncrements('id');
             // 商品名を格納するカラム
             $table->string('name','100');
             // 商品画像のパスを格納するカラム
-            $table->string('image','255');
-            // カテゴリIDと紐づけるカラム
+            $table->string('image','255')->nullable();
+            // カテゴリーIDと紐づけるカラム
             $table->unsignedBigInteger('category_id');
-            // カテゴリIDとの紐づけ
-            $table->foreign('category_id')->references('id')->on('category');
+            // カテゴリーIDと紐づけ
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
@@ -34,6 +34,6 @@ class CreateProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product');
+        Schema::dropIfExists('products');
     }
 }
