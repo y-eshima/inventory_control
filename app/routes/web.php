@@ -31,7 +31,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/list',[StockController::class,'index'])->name('stock_list');
         Route::get('/detail{id}',[StockController::class,'show'])->name('stock_detail');
         Route::post('/form',[StockController::class,'create'])->name('stock_form');
-        Route::post('/delete',[StockController::class,'edit'])->name('stock_delete');
+        Route::post('/delete',[StockController::class,'update'])->name('stock_delete');
+        Route::get('/result',[StockController::class,'result'])->name('stock_result');
     });
 });
 // 管理者にのみ表示を許可する画面

@@ -18,7 +18,9 @@
                             </div>
                         </div>
                     </div>
-                    <form action="{{ route('stock_delete') }}" class="mt-5">
+                    <form action="{{ route('stock_delete') }}" method="post" class="mt-5">
+                        @csrf
+                        <input type="hidden" value="{{ $stock->id }}" name="id">
                         <div class="d-flex justify-content-center">
                             <div class="d-flex w-50 mr-3 align-items-center">
                                 <label for="count" class="mr-2 h5 flex-shrink-0 mb-0">減少個数</label>

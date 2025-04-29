@@ -51,7 +51,7 @@ class StockController extends Controller
                 $stocks = Stock::all();
             } else { // 一般社員の場合は所属店舗の在庫のみ取り出す
                 // 在庫情報をインスタンス生成
-                $stocks = Stock::where('store_id','=',Auth::user()->store_id)->with(['store', 'product'])->get();
+                $stocks = Stock::where('store_id', '=', Auth::user()->store_id)->with(['store', 'product'])->get();
             }
         }
         // ビューに情報を渡して画面遷移
@@ -69,9 +69,9 @@ class StockController extends Controller
     public function create(Request $request)
     {
         // 選択した在庫の情報を取り出す
-        $stock = Stock::where('id','=',$request->input('id'))->with('store','product')->first();
+        $stock = Stock::where('id', '=', $request->input('id'))->with('store', 'product')->first();
         // ビューに情報を渡して画面遷移
-        return response()->view('inventoryElimination',[
+        return response()->view('inventoryElimination', [
             'user' => Auth::user(),
             'stock' => $stock
         ]);
@@ -117,27 +117,45 @@ class StockController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        // 選択した商品の情報を取り出す
-        $stock = Stock::find($id)->with(['store', 'product']);
-        // ビューに情報を渡して画面遷移
-        return response()->view('inventoryElimination', [
-            'stock' => $stock,
-            'user' => Auth::user()
-        ]);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // 減算する値をキャスト
+        $count = (int) $request->input('count');
+        $weight = (int) $request->input('weight');
+        DB::table('stocks')->where('id', '=', $request->input('id'))
+            ->update([
+                'count' => DB::raw('count - ' . $count),
+                'weight' => DB::raw('weight - ' . $weight)
+            ]);
+        return redirect(route('stock_result'))
+            ->with(['stock_id' => $request->input('id')]);
+    }
+
+    public function result()
+    {
+        // セッションからストックIDを取得
+        $id = session('stock_id');
+        if ($id) {
+            // IDが一致するストック情報を取り出す
+            $stock = Stock::where('id', '=', $id)->with('product', 'store')->first();
+            // ビューに情報を渡して画面遷移
+            return response()->view('inventoryResult', [
+                'user' => Auth::user(),
+                'stock' => $stock
+            ]);
+        } else {
+            redirect(route('stock_list'));
+        }
     }
 
     /**
