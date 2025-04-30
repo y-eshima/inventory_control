@@ -15,9 +15,9 @@
             @endif
             @if (count($stocks) != 0)
                     @foreach ($stocks as $stock)
-                        <a href="{{ route('stock_detail', ['id' => $stock->id]) }}" class="text-decoration-none text-dark">
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex align-items-center mb-3">
+                        <ul class="list-group">
+                            <a href="{{ route('stock_detail', ['id' => $stock->id]) }}" class="text-decoration-none text-dark">
+                                <li class="list-group-item d-flex align-items-center">
                                     @if ($stock->product->image)
                                         <img src="{{ asset('storage/' . $stock->product->image) }}" class="me-3 mr-4"
                                             style="width: 80px; height: 80px; object-fit: cover;">
@@ -30,9 +30,22 @@
                                         </div>
                                     </div>
                                 </li>
-                            </ul>
-                        </a>
+                            </a>
+                            <button class="btn btn-primary mb-4 product_detail_open" value="{{ $stock->product->id }}" data-url="{{ route('ajax.product_detail') }}">商品詳細</button>
+                        </ul>
                     @endforeach
+                    <div class="modal" tabindex="-1" id="modal01">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">商品詳細</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                                </div>
+                                <div class="modal-body text-left" id="productModal">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             @else
                 <div class="text-center mt-4">

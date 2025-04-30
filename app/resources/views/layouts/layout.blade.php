@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ config('app.name','在庫管理') }}</title>
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        <script src="{{ mix('js/app.js') }}"></script>
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="{{ mix('js/app.js') }}"></script>
+    <title>{{ config('app.name', '在庫管理') }}</title>
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+</head>
+
+<body>
     <header>
         <!-- ヘッダー -->
         <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
@@ -39,5 +42,6 @@
     <footer>
 
     </footer>
-    </body>
+</body>
+
 </html>

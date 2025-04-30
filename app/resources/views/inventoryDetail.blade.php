@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <form action="{{ route('stock_form') }}" method="post" class="mt-5 w-50 mr-5">
+                        <form action="{{ route('stock_form') }}" method="get" class="mt-5 w-50 mr-5">
                             @csrf
                             <input type="hidden" name="id" value="{{ $stock->id }}">
                             <button type="submit" class="btn btn-primary btn-lg w-100">在庫削除</button>

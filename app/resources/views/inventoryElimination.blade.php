@@ -18,6 +18,13 @@
                             </div>
                         </div>
                     </div>
+                    @if ($errors->any())
+                        <div class="alert alert-warning mt-4" role="alert">
+                            @foreach ($errors->all() as $message)
+                                <li>{{ $message }}</li>
+                            @endforeach
+                        </div>
+                    @endif
                     <form action="{{ route('stock_delete') }}" method="post" class="mt-5">
                         @csrf
                         <input type="hidden" value="{{ $stock->id }}" name="id">

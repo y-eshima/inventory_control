@@ -1,5 +1,4 @@
 console.log('%c Proudly Crafted with ZiOn.', 'background: #222; color: #bada55');
-import $ from 'jquery';
 window.$ = window.jQuery = $;
 
 /* ---------------------------------------------- /*
@@ -850,4 +849,42 @@ window.$ = window.jQuery = $;
     });
 })(jQuery);
 
-
+// 商品詳細のモーダルを表示するための処理
+$(function () {
+    // Ajaxリクエストの設定
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    // 商品詳細ボタンを押したとき
+    $(".product_detail_open").on("click", function () {
+        console.log($('meta[name="csrf-token"]').attr('content'));
+        // ボタンに格納しておいたIDを取得
+        let productId = $(this).val();
+        // URLを取得
+        let url = $(this).data('url');
+        $.ajax({
+            // メソッドはPOST
+            type: "POST",
+            // データを渡すPHPファイル名
+            url: url,
+            // 送信データ定義
+            data: {
+                "productId": productId,
+                "_token": $('meta[name="csrf-token"]').attr('content')
+            },
+            // データタイプはJSON
+            dataType: "json"
+        }).done(function (data) {
+            // PHPからデータを受け取りモーダルへ渡す
+            $("#productModal").html(data.doc);
+            console.log('モーダルを表示します。');
+            // モーダルを出現
+            const modal = new bootstrap.Modal(document.getElementById('modal01'));
+            modal.show();
+        }).fail(function (xhr, status, error) {//エラー処理
+            alert(error);
+        });
+    });
+});

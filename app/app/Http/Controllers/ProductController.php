@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateProduct;
 use App\Models\Category;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -43,7 +45,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateProduct $request)
     {
         // 手動トランザクションを設定
         DB::beginTransaction();
@@ -102,6 +104,23 @@ class ProductController extends Controller
             'category' => $category,
             'user' => Auth::user()
         ]);
+    }
+    // Ajaxでモーダルを表示するためのメソッド
+    public function ajaxDetail(Request $request) {
+        // 受け取った商品IDと一致する商品の情報を取得
+        $product = Product::find($request->input('productId'));
+        // 商品情報が見つからなければ404エラー画面を出力
+        if (!$product) {
+            return response()->json(['error' => '商品が見つかりません。'],404);
+        }
+        // 商品情報と合致するカテゴリー情報を取り出す
+        $category = Category::find($product->category_id);
+        // ユーザ情報を出力
+        $user = Auth::user();
+        // 情報をレンダリング
+        Log::debug($product);
+        $html = view('partials.product_detail_modal',compact('product','category','user'))->render();
+        return response()->json(['doc' => $html]);
     }
 
     /**

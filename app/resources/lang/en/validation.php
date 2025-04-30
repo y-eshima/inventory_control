@@ -150,7 +150,9 @@ return [
         'name' => '名前',
         'pass' => 'パスワード',
         'email' => 'メールアドレス',
-        'store_id' => '店舗'
+        'store_id' => '店舗',
+        'count' => '個数',
+        'weight' => '重量',
     ],
 
 ];

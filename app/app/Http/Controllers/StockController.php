@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StockDelete;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Store;
@@ -127,7 +128,7 @@ class StockController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function update(Request $request)
+    public function update(StockDelete $request)
     {
         // 減算する値をキャスト
         $count = (int) $request->input('count');

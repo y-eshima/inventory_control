@@ -1,0 +1,5 @@
+{
+    "require": {
+        "laravel-lang/lang": "^14.8"
+    }
+}
