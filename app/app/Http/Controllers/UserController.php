@@ -75,7 +75,7 @@ class UserController extends Controller
             return redirect()->route('user_confirm',['id' => $user->id]);
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
+            redirect()->route('user_create');
         }
     }
 

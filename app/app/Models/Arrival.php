@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Arrival extends Model
 {
+    // タイムスタンプを無効化
+    public $timestamps = false;
     // 商品テーブルと紐づけ
     public function product(){
         return $this->belongsTo('App\Models\Product','product_id','id');

@@ -40,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
     // 入荷管理関係のグループ
     Route::prefix('arrival')->group(function(){
         Route::get('/list',[ArrivalController::class,'index'])->name('arrival_list');
+        Route::get('/register',[ArrivalController::class,'create'])->name('arrival_register');
+        Route::post('/store',[ArrivalController::class,'store'])->name('arrival_store');
+        Route::get('/result/{id}',[ArrivalController::class,'result'])->name('arrival_result');
     });
 });
 // 管理者にのみ表示を許可する画面

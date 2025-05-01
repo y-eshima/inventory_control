@@ -9,6 +9,7 @@
                 </form>
             </div>
             <div class="text-center h1 mt-3">入荷一覧</div>
+            <a href="{{ route('arrival_register') }}" class="btn btn-primary btn-lg mb-4 w-100">入荷登録</a>
             @if (count($arrivals) != 0)
                     @foreach ($arrivals as $arrival)
                         <a href="{{ route('stock_detail', ['id' => $arrival->id]) }}" class="text-decoration-none text-dark">
@@ -19,10 +20,13 @@
                                             style="width: 80px; height: 80px; object-fit: cover;">
                                     @endif
                                     <div class="flex-grow-1">
-                                        <h4 class="mb-1">商品名 : {{ $arrival->product->name }}</h4>
                                         <div class="d-flex justify-content-start">
-                                            <p class="mb-0 mr-4 h4">店舗名 : {{ $arrival->store->name }}</p>
-                                            <p class="mb-0 h4">在庫数 : {{ $arrival->count }}個</p>
+                                            <h4 class="mb-1 mr-5">商品名 : {{ $arrival->product->name }}</h4>
+                                            <p class="mb-0 h4">店舗名 : {{ $arrival->store->name }}</p>
+                                        </div>
+                                        <div class="d-flex justify-content-start">
+                                            <p class="mb-0 h4 mr-5">入荷数 : {{ $arrival->count }}個</p>
+                                            <p class="mb-0 h4">入荷予定日 : {{ $arrival->date }}</p>
                                         </div>
                                     </div>
                                 </li>

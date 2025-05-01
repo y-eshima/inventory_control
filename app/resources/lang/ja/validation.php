@@ -155,6 +155,8 @@ return [
         'weight' => '重量',
         'product_name' => '商品名',
         'category_id' => 'カテゴリー',
+        'product_id' => '商品',
+        'date' => '日付',
     ],
 
 ];
