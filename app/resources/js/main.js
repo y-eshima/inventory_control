@@ -859,7 +859,6 @@ $(function () {
     });
     // 商品詳細ボタンを押したとき
     $(".product_detail_open").on("click", function () {
-        console.log($('meta[name="csrf-token"]').attr('content'));
         // ボタンに格納しておいたIDを取得
         let productId = $(this).val();
         // URLを取得
@@ -879,12 +878,15 @@ $(function () {
         }).done(function (data) {
             // PHPからデータを受け取りモーダルへ渡す
             $("#productModal").html(data.doc);
-            console.log('モーダルを表示します。');
             // モーダルを出現
-            const modal = new bootstrap.Modal(document.getElementById('modal01'));
-            modal.show();
+            $('#modal01').modal('show');
         }).fail(function (xhr, status, error) {//エラー処理
-            alert(error);
+            lonsole.error(error);
         });
+    });
+    // モーダルの閉じるボタンのイベントを親要素に委譲する (Bootstrap 4 の場合)
+    $(document).on('click', '#modal01 .btn-close', function () {
+        // Bootstrap 4 の場合のモーダル非表示
+        $('#modal01').modal('hide');
     });
 });

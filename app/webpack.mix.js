@@ -15,5 +15,6 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/scss/app.scss', 'public/css')
     .autoload({
         jquery: ['$', 'window.jQuery', 'jQuery'], // jQueryをglobalで利用可能にする
+        bootstrap: ['bootstrap']
     })
     .version(); // キャッシュ対策

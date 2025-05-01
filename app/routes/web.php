@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProductController;
@@ -36,6 +37,10 @@ Route::middleware(['auth'])->group(function () {
     });
     // Ajaxでモーダルを表示するためのルート準備
     Route::post('/ajax/product-detail', [ProductController::class, 'ajaxDetail'])->name('ajax.product_detail');
+    // 入荷管理関係のグループ
+    Route::prefix('arrival')->group(function(){
+        Route::get('/list',[ArrivalController::class,'index'])->name('arrival_list');
+    });
 });
 // 管理者にのみ表示を許可する画面
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {

@@ -2,7 +2,7 @@
 /******/ import $ from 'jquery';
 /******/ import { WOW } from 'wowjs';
 /******/ import 'animate.css';
-/******/ import 'bootstrap';
+/******/ import 'bootstrap/dist/js/bootstrap.bundle';
 /******/ import './plugins';
 /******/ import './main';
 /******/ window.WOW = WOW;

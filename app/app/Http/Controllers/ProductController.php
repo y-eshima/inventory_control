@@ -107,6 +107,7 @@ class ProductController extends Controller
     }
     // Ajaxでモーダルを表示するためのメソッド
     public function ajaxDetail(Request $request) {
+        Log::debug('メソッドが実行されました。');
         // 受け取った商品IDと一致する商品の情報を取得
         $product = Product::find($request->input('productId'));
         // 商品情報が見つからなければ404エラー画面を出力
@@ -118,7 +119,6 @@ class ProductController extends Controller
         // ユーザ情報を出力
         $user = Auth::user();
         // 情報をレンダリング
-        Log::debug($product);
         $html = view('partials.product_detail_modal',compact('product','category','user'))->render();
         return response()->json(['doc' => $html]);
     }

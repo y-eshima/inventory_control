@@ -7,7 +7,7 @@
                 <a href="{{ route('stock_list') }}" class="btn btn-primary w-100 py-5 my-4 fs-4 h4">在庫確認</a>
             </div>
             <div class="col-6">
-                <a href="#" class="btn btn-primary w-100 py-5 my-4 fs-4 h4">入荷確認</a>
+                <a href="{{ route('arrival_list') }}" class="btn btn-primary w-100 py-5 my-4 fs-4 h4">入荷確認</a>
             </div>
         </div>
         @if ($user->role == 1)
