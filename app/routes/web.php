@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArrivalController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProductController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,15 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
+// パスワードリセット関係のルートを定義
+Route::prefix('reset')->group(function(){
+    // パスワードリセット用のメール送信フォーム
+    Route::get('/',[ForgotPasswordController::class,'showResetForm'])->name('reset_form');
+    Route::post('/sendEmail',[ForgotPasswordController::class,'sendResetLink'])->name('reset_send_mail');
+    Route::get('/form/{token}/{email}',[ResetPasswordController::class,'showResetForm'])->name('pass_reset_form');
+    Route::post('/pass/reset',[ResetPasswordController::class,'reset'])->name('pass_update');
+    Route::post('/result',[ResetPasswordController::class,'result'])->name('reset_result');
+});
 // 一般と管理者両方に表示する画面
 Route::middleware(['auth'])->group(function () {
     // ホーム画面を表示するルート

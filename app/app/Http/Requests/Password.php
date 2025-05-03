@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateArrival extends FormRequest
+class Password extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,9 @@ class CreateArrival extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'required|integer',
-            'date' => 'required|date',
-            'count' => 'required|integer|min:1',
-            'weight' => 'required|integer|min:1'
+            'pass' => 'required|min:6|max:16',
+            'token' => 'required',
+            'email' => 'required|email'
         ];
     }
 }

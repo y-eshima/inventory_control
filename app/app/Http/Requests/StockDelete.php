@@ -24,8 +24,8 @@ class StockDelete extends FormRequest
     public function rules()
     {
         return [
-            'count' => 'required|integer',
-            'weight' => 'required|integer'
+            'count' => 'required|integer|min:1',
+            'weight' => 'required|integer|min:1'
         ];
     }
 }
