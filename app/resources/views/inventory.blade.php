@@ -31,14 +31,15 @@
                                     </div>
                                 </li>
                             </a>
-                            <button class="btn btn-primary mb-4 product_detail_open" value="{{ $stock->product->id }}" data-url="{{ route('ajax.product_detail') }}">商品詳細</button>
+                            <button class="btn btn-primary mb-4 product_detail_open" value="{{ $stock->product->id }}"
+                                data-url="{{ route('ajax.product_detail') }}">商品詳細</button>
                         </ul>
                     @endforeach
                     <div class="modal" tabindex="-1" id="modal01">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">商品詳細</h4>
+                                    <h4 class="modal-title text-center">商品詳細</h4>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                                 </div>
                                 <div class="modal-body text-left" id="productModal">
@@ -48,9 +49,9 @@
                     </div>
                 </div>
             @else
-                <div class="text-center mt-4">
-                    <div class="alert alert-warning h2">在庫はまだありません。</div>
-                </div>
-            @endif
+            <div class="text-center mt-4">
+                <div class="alert alert-warning h2">在庫はまだありません。</div>
+            </div>
+        @endif
     </main>
 @endsection

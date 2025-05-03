@@ -6,6 +6,7 @@ use App\Http\Requests\CreateArrival;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\User;
+use Arr;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Arrival;
@@ -21,13 +22,72 @@ class ArrivalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // 入荷情報を格納する変数を宣言
         $arrival = null;
         // 検索されたかで分岐処理
-        if (false) {
-
+        if ($request->input('search') || $request->input('date')) {
+            // 検索情報を変数に格納
+            $search = $request->input('search');    // キーワード検索
+            $date = $request->input('date');    // 入荷日検索
+            if (Auth::user()->role == 1) {  // 管理者の検索
+                if ($search && $date) {     // 入荷日とキーワード両方の入力がある場合
+                    // where文のグループを作成
+                    $arrival = Arrival::where(function ($query) use ($search) {
+                        // 商品名で検索する
+                        $query->whereHas('product', function ($q) use ($search) {
+                            $q->where('name', 'like', '%' . $search . '%');
+                        // 店舗名で検索
+                        })->orWhereHas('store', function ($q) use ($search) {
+                            $q->where('name', 'like', '%' . $search . '%');
+                        });
+                    // 入荷日で検索
+                    })->where('date', '>=', $date)->get();
+                } else if ($search) {   // キーワード検索のみ
+                    // where文のグループを作成
+                    $arrival = Arrival::where(function ($query) use ($search) {
+                        // 商品名で検索
+                        $query->whereHas('product', function ($q) use ($search) {
+                            $q->where('name', 'like', '%' . $search . '%');
+                        // 店舗名で検索
+                        })->orWhereHas('store', function ($q) use ($search) {
+                            $q->where('name', 'like', '%' . $search . '%');
+                        });
+                    })->get();
+                } else {
+                    // 入荷日で検索
+                    $arrival = Arrival::where('date', '>=', $date)->get();
+                }
+            } else {    // 一般社員の検索
+                // 店舗IDを変数に格納する
+                $user_store_id = Auth::user()->store_id;
+                if ($search && $date) {     // キーワードと入荷日両方の入力がある場合
+                    // where文でグループを作成
+                    $arrival = Arrival::whereHas('product', function ($query) use ($search) {
+                        // 商品名で検索
+                        $query->where('name', 'like', '%' . $search . '%');
+                    // 入荷日で検索
+                    })->where('date', '>=', $date)->where('store_id', $user_store_id)->get();
+                } else if ($search) {       // キーワードのみで入力がある場合
+                    // where文のグループ作成
+                    $arrival = Arrival::whereHas('product', function ($query) use ($search) {
+                        // 商品名で検索
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })->where('store_id', $user_store_id)->get();
+                } else {
+                    // 入荷日で検索
+                    $arrival = Arrival::where('date', '>=', $date)
+                        ->where('store_id', Auth::user()->store_id)->get();
+                }
+            }
+            // ビューに情報を渡して画面遷移
+            return response()->view('arrivalList', [
+                'search' => $search,
+                'date' => $date,
+                'user' => Auth::user(),
+                'arrivals' => $arrival
+            ]);
         } else {
             if (Auth::user()->role == 1) {  // 管理者の場合は全ての入荷情報を取得
                 // 入荷情報をインスタンス生成
@@ -163,9 +223,9 @@ class ArrivalController extends Controller
                 $stock->save();
             }
             DB::commit();
-            $stocks = Stock::where('id',$stock->id)->with(['product','store'])->first();
+            $stocks = Stock::where('id', $stock->id)->with(['product', 'store'])->first();
             Arrival::destroy($arrival->id);
-            return view('arrivalFixing',[
+            return view('arrivalFixing', [
                 'user' => Auth::user(),
                 'stock' => $stocks,
             ]);

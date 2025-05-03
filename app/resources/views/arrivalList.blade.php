@@ -4,12 +4,18 @@
         <div class="container mt-4">
             <div class="form-group">
                 <form action="{{ route('arrival_list') }}" method="get" class="d-flex justify-content-end">
-                    <input class="form-control mr-2 w-25" type="date" name="date">
-                    <input class="form-control mr-2 w-25" type="text" name="search" placeholder="検索">
+                    <input class="form-control mr-2 w-25" type="date" name="date" value="{{ isset($date) ? $date : null }}">
+                    <input class="form-control mr-2 w-25" type="text" name="search" placeholder="検索"
+                        value="{{ isset($search) ? $search : null }}">
                     <input class="btn btn-primary" type="submit" value="検索">
                 </form>
             </div>
-            <div class="text-center h1 mt-3">入荷一覧</div>
+            @if (isset($search) || isset($date))
+                <div class="text-center h1 mt-3">
+                    {{ $search ? '"' . $search . '"' : null }}{{ $date ? '入荷日' . $date . '以降' : null }}の検索結果</div>
+            @else
+                <div class="text-center h1 mt-3">入荷一覧</div>
+            @endif
             <a href="{{ route('arrival_register') }}" class="btn btn-primary btn-lg mb-4 w-100">入荷登録</a>
             @if (count($arrivals) != 0)
                     @foreach ($arrivals as $arrival)

@@ -52,7 +52,7 @@ class StockController extends Controller
                 $stocks = Stock::all();
             } else { // 一般社員の場合は所属店舗の在庫のみ取り出す
                 // 在庫情報をインスタンス生成
-                $stocks = Stock::where('store_id', '=', Auth::user()->store_id)->with(['store', 'product'])->get();
+                $stocks = Stock::where('store_id', Auth::user()->store_id)->with(['store', 'product'])->get();
             }
         }
         // ビューに情報を渡して画面遷移
