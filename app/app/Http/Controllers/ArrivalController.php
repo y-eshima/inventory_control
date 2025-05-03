@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateArrival;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Arrival;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Models\Store;
 
 class ArrivalController extends Controller
 {
@@ -96,25 +99,79 @@ class ArrivalController extends Controller
     {
         // IDと一致する入荷情報を取得
         $arrival = Arrival::find($id);
-        // 入荷情報と一致する商品情報を取得
-        $product = Product::find($arrival->product_id);
-        // ビューに情報を渡して画面を遷移
-        return view('arrivalRegiResult', [
-            'user' => Auth::user(),
-            'arrival' => $arrival,
-            'product' => $product,
-        ]);
+        if ($arrival) {
+            // 入荷情報と一致する商品情報を取得
+            $product = Product::find($arrival->product_id);
+            // ビューに情報を渡して画面を遷移
+            return view('arrivalRegiResult', [
+                'user' => Auth::user(),
+                'arrival' => $arrival,
+                'product' => $product,
+            ]);
+        } else {
+            abort(404, '入荷情報が見つかりません。');
+        }
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        // IDと一致する入荷情報を取得
+        $arrival = Arrival::find($id);
+        if ($arrival) {
+            // 入荷情報と一致する商品情報を取得
+            $product = Product::find($arrival->product_id);
+            // 入荷情報と一致する店舗情報を取得
+            $store = Store::find($arrival->store_id);
+            // ビューに情報を渡して画面遷移
+            return view('arrivalDetail', [
+                'user' => Auth::user(),
+                'arrival' => $arrival,
+                'product' => $product,
+                'store' => $store
+            ]);
+        } else {
+            abort(404, '入荷情報が見つかりません。');
+        }
+    }
+
+    /**
+     * 入荷情報を確定する処理を行うメソッド
+     */
+    public function confirm(Request $request)
+    {
+        // 選択された入荷情報を取得
+        $arrival = Arrival::find($request->arrival_id);
+        if ($arrival) {
+            // 入荷情報の店舗IDと商品IDが一致する在庫情報があるか確認
+            $stock = Stock::where('store_id', $arrival->store_id)
+                ->where('product_id', $arrival->product_id)->first();
+            DB::beginTransaction();
+            if ($stock) {   // データベースに商品IDと店舗IDが一致する在庫が見つかった場合
+                Stock::where('id', $stock->id)->increment('count', $arrival->count);
+                Stock::where('id', $stock->id)->increment('weight', $arrival->weight);
+            } else {    // データベースに商品IDと店舗iDが一致する在庫がない場合
+                $stock = new Stock;
+                $stock->store_id = $arrival->store_id;
+                $stock->product_id = $arrival->product_id;
+                $stock->count = $arrival->count;
+                $stock->weight = $arrival->weight;
+                $stock->save();
+            }
+            DB::commit();
+            $stocks = Stock::where('id',$stock->id)->with(['product','store'])->first();
+            Arrival::destroy($arrival->id);
+            return view('arrivalFixing',[
+                'user' => Auth::user(),
+                'stock' => $stocks,
+            ]);
+        } else {
+            abort(404, '入荷情報が見つかりません。');
+        }
     }
 
     /**

@@ -54,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/register',[ArrivalController::class,'create'])->name('arrival_register');
         Route::post('/store',[ArrivalController::class,'store'])->name('arrival_store');
         Route::get('/result/{id}',[ArrivalController::class,'result'])->name('arrival_result');
+        Route::get('/detail/{id}',[ArrivalController::class,'show'])->name('arrival_detail');
+        Route::post('/confirm',[ArrivalController::class,'confirm'])->name('arrival_confirm');
     });
 });
 // 管理者にのみ表示を許可する画面

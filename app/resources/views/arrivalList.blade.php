@@ -3,8 +3,9 @@
     <main>
         <div class="container mt-4">
             <div class="form-group">
-                <form action="{{ route('stock_list') }}" method="get" class="d-flex justify-content-end">
-                    <input class="form-control mr-2 w-25" type="text" name="search" id="search" placeholder="検索">
+                <form action="{{ route('arrival_list') }}" method="get" class="d-flex justify-content-end">
+                    <input class="form-control mr-2 w-25" type="date" name="date">
+                    <input class="form-control mr-2 w-25" type="text" name="search" placeholder="検索">
                     <input class="btn btn-primary" type="submit" value="検索">
                 </form>
             </div>
@@ -12,7 +13,7 @@
             <a href="{{ route('arrival_register') }}" class="btn btn-primary btn-lg mb-4 w-100">入荷登録</a>
             @if (count($arrivals) != 0)
                     @foreach ($arrivals as $arrival)
-                        <a href="{{ route('stock_detail', ['id' => $arrival->id]) }}" class="text-decoration-none text-dark">
+                        <a href="{{ route('arrival_detail', ['id' => $arrival->id]) }}" class="text-decoration-none text-dark">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex align-items-center mb-3">
                                     @if ($arrival->product->image)
@@ -26,7 +27,7 @@
                                         </div>
                                         <div class="d-flex justify-content-start">
                                             <p class="mb-0 h4 mr-5">入荷数 : {{ $arrival->count }}個</p>
-                                            <p class="mb-0 h4">入荷予定日 : {{ $arrival->date }}</p>
+                                            <p class="mb-0 h4">入荷予定日 : {{ $arrival->formatted_date }}</p>
                                         </div>
                                     </div>
                                 </li>

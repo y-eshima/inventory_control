@@ -14,10 +14,11 @@
                                 <p class="h2">商品名 : {{ $product->name }}</p>
                                 <p class="h2 pt-3">入荷個数 : {{ $arrival->count }}</p>
                                 <p class="h2 pt-3">入荷重量 : {{ $arrival->weight }}</p>
-                                <p class="h2 pt-3">入荷予定日 : {{ $arrival->date }}</p>
+                                <p class="h2 pt-3">入荷予定日 : {{ $arrival->formatted_date }}</p>
                             </div>
                         </div>
                     </div>
+                    <a href="{{ route('arrival_list') }}" class="btn btn-primary btn-lg w-100 mt-4">入荷一覧へ戻る</a>
                 </div>
             </div>
         </div>

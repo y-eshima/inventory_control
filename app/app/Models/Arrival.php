@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Arrival extends Model
@@ -16,5 +17,9 @@ class Arrival extends Model
     //店舗テーブルと紐づけ
     public function store(){
         return $this->belongsTo('App\Models\Store','store_id','id');
+    }
+
+    public function getFormattedDateAttribute(){
+        return Carbon::parse($this->attributes['date'])->format('Y年m月d日');
     }
 }

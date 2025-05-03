@@ -14,9 +14,18 @@
                                 <p class="h2">商品名 : {{ $product->name }}</p>
                                 <p class="h2 pt-3">入荷個数 : {{ $arrival->count }}</p>
                                 <p class="h2 pt-3">入荷重量 : {{ $arrival->weight }}</p>
-                                <p class="h2 pt-3">入荷予定日 : {{ $arrival->date }}</p>
+                                <p class="h2 pt-3">入荷予定日 : {{ $arrival->formatted_date }}</p>
+                                <p class="h2 pt-3">店舗 : {{ $store->name }}</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="w-100 d-flex mt-5 justify-content-between">
+                        <form action="{{ route('arrival_confirm') }}" class="w-50 mr-2" method="post">
+                            @csrf
+                            <input type="hidden" name="arrival_id" value="{{ $arrival->id }}">
+                            <input type="submit" class="btn btn-primary btn-lg w-100" value="入荷確定">
+                        </form>
+                        <a href="{{ route('arrival_list') }}" class="btn btn-primary btn-lg w-50 ml-2">入荷一覧へ戻る</a>
                     </div>
                 </div>
             </div>
