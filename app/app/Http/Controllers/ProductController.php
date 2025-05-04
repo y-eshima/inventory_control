@@ -72,7 +72,7 @@ class ProductController extends Controller
             // トランザクションをコミット
             DB::commit();
             // 登録完了画面に遷移
-            return redirect()->route('product_confirm',['id' => $product->id]);
+            return redirect()->route('product_confirm', ['id' => $product->id]);
         } catch (Exception $e) {
             // 問題が発生した場合はロールバック
             DB::rollBack();
@@ -81,7 +81,7 @@ class ProductController extends Controller
                 \Storage::delete('/public/' . $path[1]);
             }
             // 商品情報登録フォームに遷移
-            return response()->view('productRegistrationForm',[
+            return response()->view('productRegistrationForm', [
                 'message' => '商品情報の登録に失敗しました。'
             ]);
         }
@@ -99,28 +99,29 @@ class ProductController extends Controller
         // 商品情報のカテゴリーIDと一致するカテゴリー情報を変数に受け取る
         $category = Category::find($product->category_id);
         // ビューに情報を渡して画面遷移
-        return view('productConfirm',[
+        return view('productConfirm', [
             'product' => $product,
             'category' => $category,
             'user' => Auth::user()
         ]);
     }
     // Ajaxでモーダルを表示するためのメソッド
-    public function ajaxDetail(Request $request) {
-        Log::debug('メソッドが実行されました。');
+    public function ajaxDetail(Request $request)
+    {
         // 受け取った商品IDと一致する商品の情報を取得
         $product = Product::find($request->input('productId'));
         // 商品情報が見つからなければ404エラー画面を出力
         if (!$product) {
-            return response()->json(['error' => '商品が見つかりません。'],404);
+            return response()->json(['error' => '商品が見つかりません。'], 404);
+        } else {
+            // 商品情報と合致するカテゴリー情報を取り出す
+            $category = Category::find($product->category_id);
+            // ユーザ情報を出力
+            $user = Auth::user();
+            // 情報をレンダリング
+            $html = view('partials.product_detail_modal', compact('product', 'category', 'user'))->render();
+            return response()->json(['doc' => $html]);
         }
-        // 商品情報と合致するカテゴリー情報を取り出す
-        $category = Category::find($product->category_id);
-        // ユーザ情報を出力
-        $user = Auth::user();
-        // 情報をレンダリング
-        $html = view('partials.product_detail_modal',compact('product','category','user'))->render();
-        return response()->json(['doc' => $html]);
     }
 
     /**

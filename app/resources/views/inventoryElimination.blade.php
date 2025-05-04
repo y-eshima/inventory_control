@@ -29,13 +29,18 @@
                         @csrf
                         <input type="hidden" value="{{ $stock->id }}" name="id">
                         <div class="d-flex justify-content-center">
+                            @if (isset($message))
+                                <div class="alert alert-danger" role="alert">{{ $message }}</div>
+                            @endif
                             <div class="d-flex w-50 mr-3 align-items-center">
                                 <label for="count" class="mr-2 h5 flex-shrink-0 mb-0">減少個数</label>
-                                <input id="count" type="number" name="count" class="form-control">
+                                <input id="count" type="number" name="count" class="form-control" min="0"
+                                    max="{{ $stock->count }}">
                             </div>
                             <div class="d-flex w-50 align-items-center">
                                 <label for="weight" class="mr-2 h5 flex-shrink-0 mb-0">減少重量</label>
-                                <input id="weight" type="number" name="weight" class="form-control">
+                                <input id="weight" type="number" name="weight" class="form-control" min="0"
+                                    max="{{ $stock->weight }}">
                             </div>
                         </div>
                         <div class="align-items-center">

@@ -99,17 +99,25 @@ class StockController extends Controller
     {
         // 受け取ったIDの在庫情報を変数に受け取る
         $stock = Stock::find($id);
-        // 在庫の商品IDと一致する商品情報を受け取る
-        $product = Product::find($stock->product_id);
-        // 在庫の店舗IDと一致する店舗情報を受け取る
-        $store = Store::find($stock->store_id);
-        // ビューに情報を渡して画面遷移
-        return response()->view('inventoryDetail', [
-            'stock' => $stock,
-            'product' => $product,
-            'store' => $store,
-            'user' => Auth::user()
-        ]);
+        if ($stock) {
+            if (Auth::user()->role == 1 || Auth::user()->store_id == $stock->store_id) {
+                // 在庫の商品IDと一致する商品情報を受け取る
+                $product = Product::find($stock->product_id);
+                // 在庫の店舗IDと一致する店舗情報を受け取る
+                $store = Store::find($stock->store_id);
+                // ビューに情報を渡して画面遷移
+                return response()->view('inventoryDetail', [
+                    'stock' => $stock,
+                    'product' => $product,
+                    'store' => $store,
+                    'user' => Auth::user()
+                ]);
+            } else {
+                abort(404);
+            }
+        } else {
+            abort(404);
+        }
     }
 
     /**
@@ -133,13 +141,22 @@ class StockController extends Controller
         // 減算する値をキャスト
         $count = (int) $request->input('count');
         $weight = (int) $request->input('weight');
-        DB::table('stocks')->where('id', '=', $request->input('id'))
-            ->update([
-                'count' => DB::raw('count - ' . $count),
-                'weight' => DB::raw('weight - ' . $weight)
-            ]);
-        return redirect(route('stock_result'))
-            ->with(['stock_id' => $request->input('id')]);
+        $stock = Stock::find($request->input('id'));
+        if ($stock->count < $count || $stock->weight < $weight) {
+            abort(404, '無効な値が入力されました。');
+        } else {
+            DB::table('stocks')->where('id', '=', $request->input('id'))
+                ->update([
+                    'count' => DB::raw('count - ' . $count),
+                    'weight' => DB::raw('weight - ' . $weight)
+                ]);
+            if ($stock->weight == 0 && $stock->count == 0) {
+                $stock->delete();
+                return redirect(route('stock_list'));
+            }
+            return redirect(route('stock_result'))
+                ->with(['stock_id' => $request->input('id')]);
+        }
     }
 
     public function result()

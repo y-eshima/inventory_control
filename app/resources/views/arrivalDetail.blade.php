@@ -8,7 +8,7 @@
                         <div class="card-header h3 text-center">入荷詳細</div>
                         <div class="card-body d-flex align-items-center">
                             @if ($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" class="mr-5 w-80">
+                                <img src="{{ asset('storage/' . $product->image) }}" class="mr-5 w-50">
                             @endif
                             <div class="d-flex flex-column text-start ml-5">
                                 <p class="h2">商品名 : {{ $product->name }}</p>

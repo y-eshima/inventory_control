@@ -21,7 +21,7 @@ class UserController extends Controller
         // ユーザ情報を変数に受け取る
         $user = Auth::user();
         // ビューに値を投げて画面を遷移する
-        return view('home',[
+        return view('home', [
             'user' => $user,
         ]);
     }
@@ -38,7 +38,7 @@ class UserController extends Controller
         // 店舗情報を全て変数に受け取る
         $stores = Store::all();
         // ビューに情報を渡して遷移
-        return response()->view('employeeRegistrationForm',[
+        return response()->view('employeeRegistrationForm', [
             'user' => $user,
             'stores' => $stores
         ]);
@@ -52,7 +52,7 @@ class UserController extends Controller
     {
         // 手動トランザクションを開始
         DB::beginTransaction();
-        try{
+        try {
             // ユーザのインスタンスを生成
             $user = new User;
             // ユーザ名を格納
@@ -72,7 +72,7 @@ class UserController extends Controller
             // セッションにハッシュ化する前のパスワードを格納
             session(['raw_pass' => $request->pass]);
             // 登録完了画面に遷移
-            return redirect()->route('user_confirm',['id' => $user->id]);
+            return redirect()->route('user_confirm', ['id' => $user->id]);
         } catch (Exception $e) {
             DB::rollBack();
             redirect()->route('user_create');
@@ -95,7 +95,7 @@ class UserController extends Controller
         // ハッシュ化前のパスワードをセッションから削除
         session()->forget('raw_pass');
         // ビューに情報を渡して画面を遷移
-        return view('employeeRegistrationConfirm',[
+        return view('employeeRegistrationConfirm', [
             'employee' => $employee,
             'store' => $store,
             'pass' => $raw_pass,
@@ -134,20 +134,19 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        
+
     }
 
     /**
      * ログアウト処理を行うメソッド
-     */ 
+     */
 
-    public function logout(Request $request) {
+    public function logout()
+    {
         // ログアウト処理
         Auth::logout();
         // セッションを破棄
-        $request->session()->invalidate();
-        // トークンを発行
-        $request->session()->regenerateToken();
+        session()->flush();
         // ログイン画面に遷移
         return redirect('/');
     }

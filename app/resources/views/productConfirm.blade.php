@@ -9,7 +9,7 @@
                     <h4 class="text-center my-3">カテゴリー : {{ $category->name }}</h4>
                     @if ($product->image)
                         <div class="d-flex justify-content-center my-3">
-                            <img src="{{ asset('storage/' . $product->image) }}" class="w-30" />
+                            <img src="{{ asset('storage/' . $product->image) }}" class="w-50" />
                         </div>
                     @endif
                     <div class="d-flex justify-content-center my-3">

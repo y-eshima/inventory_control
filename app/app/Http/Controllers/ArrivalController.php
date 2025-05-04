@@ -38,11 +38,11 @@ class ArrivalController extends Controller
                         // 商品名で検索する
                         $query->whereHas('product', function ($q) use ($search) {
                             $q->where('name', 'like', '%' . $search . '%');
-                        // 店舗名で検索
+                            // 店舗名で検索
                         })->orWhereHas('store', function ($q) use ($search) {
                             $q->where('name', 'like', '%' . $search . '%');
                         });
-                    // 入荷日で検索
+                        // 入荷日で検索
                     })->where('date', '>=', $date)->get();
                 } else if ($search) {   // キーワード検索のみ
                     // where文のグループを作成
@@ -50,7 +50,7 @@ class ArrivalController extends Controller
                         // 商品名で検索
                         $query->whereHas('product', function ($q) use ($search) {
                             $q->where('name', 'like', '%' . $search . '%');
-                        // 店舗名で検索
+                            // 店舗名で検索
                         })->orWhereHas('store', function ($q) use ($search) {
                             $q->where('name', 'like', '%' . $search . '%');
                         });
@@ -67,7 +67,7 @@ class ArrivalController extends Controller
                     $arrival = Arrival::whereHas('product', function ($query) use ($search) {
                         // 商品名で検索
                         $query->where('name', 'like', '%' . $search . '%');
-                    // 入荷日で検索
+                        // 入荷日で検索
                     })->where('date', '>=', $date)->where('store_id', $user_store_id)->get();
                 } else if ($search) {       // キーワードのみで入力がある場合
                     // where文のグループ作成
@@ -183,17 +183,21 @@ class ArrivalController extends Controller
         // IDと一致する入荷情報を取得
         $arrival = Arrival::find($id);
         if ($arrival) {
-            // 入荷情報と一致する商品情報を取得
-            $product = Product::find($arrival->product_id);
-            // 入荷情報と一致する店舗情報を取得
-            $store = Store::find($arrival->store_id);
-            // ビューに情報を渡して画面遷移
-            return view('arrivalDetail', [
-                'user' => Auth::user(),
-                'arrival' => $arrival,
-                'product' => $product,
-                'store' => $store
-            ]);
+            if (Auth::user()->role == 1 || Auth::user()->store_id == $arrival->store_id) {
+                // 入荷情報と一致する商品情報を取得
+                $product = Product::find($arrival->product_id);
+                // 入荷情報と一致する店舗情報を取得
+                $store = Store::find($arrival->store_id);
+                // ビューに情報を渡して画面遷移
+                return view('arrivalDetail', [
+                    'user' => Auth::user(),
+                    'arrival' => $arrival,
+                    'product' => $product,
+                    'store' => $store
+                ]);
+            } else {
+                abort(404);
+            }
         } else {
             abort(404, '入荷情報が見つかりません。');
         }

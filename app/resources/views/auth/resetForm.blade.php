@@ -20,7 +20,8 @@
                                     <input type="text" class="form-control" name="email">
                                 </div>
                                 <div class="text-center">
-                                    <input type="submit" value="メール送信" class="btn btn-primary btn-lg">
+                                    <input type="submit" value="メール送信" class="btn btn-primary btn-lg w-25">
+                                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg w-25 ml-5">戻る</a>
                                 </div>
                             </form>
                         </div>
