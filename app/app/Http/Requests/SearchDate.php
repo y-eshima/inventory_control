@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Password extends FormRequest
+class SearchDate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,7 @@ class Password extends FormRequest
     public function rules()
     {
         return [
-            'pass' => 'required|min:6|max:16',
-            'pass_conf' => 'required|same:pass',
-            'token' => 'required',
-            'email' => 'required|email'
+            'date' => 'nullable|date',
         ];
     }
 }

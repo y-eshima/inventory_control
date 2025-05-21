@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateArrival;
+use App\Http\Requests\SearchDate;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\User;
@@ -22,7 +23,7 @@ class ArrivalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(SearchDate $request)
     {
         // 入荷情報を格納する変数を宣言
         $arrival = null;
